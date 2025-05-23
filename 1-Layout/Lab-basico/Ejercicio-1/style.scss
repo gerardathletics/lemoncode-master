@@ -1,0 +1,139 @@
+@use "sass:color";
+
+// Base colors
+$base-color-red: #ff0000; 
+$base-color-blue: #337ab7; 
+$base-color-green: #5cb85c; 
+
+// Dynamic color palettes function
+@mixin generate-color-palette($name, $base-color) {
+    .container-1.theme-#{$name} {
+        margin-bottom: 30px; 
+        display: block; 
+            
+        .box-container {
+            display: flex;
+            flex-wrap: nowrap; 
+            justify-content: center; 
+            gap: 8px; 
+        }
+
+        .box {
+            width: 100px; 
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+            &:hover {
+                transform: translateY(-2px);
+            }
+        }
+
+        .color-box-text {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .darken-4 { 
+            background-color: color.scale($base-color, $lightness: -60%);
+        }
+        .darken-3 { 
+            background-color: color.scale($base-color, $lightness: -45%);
+        }
+        .darken-2 { 
+            background-color: color.scale($base-color, $lightness: -30%);
+        }
+        .darken-1 { 
+            background-color: color.scale($base-color, $lightness: -15%);
+        }
+        .base-color { 
+            background-color: $base-color;
+            width: 150px;
+        }
+        .lighten-1 { 
+            background-color: color.scale($base-color, $lightness: 15%);
+        }
+        .lighten-2 { 
+            background-color: color.scale($base-color, $lightness: 30%);
+        }
+        .lighten-3 { 
+            background-color: color.scale($base-color, $lightness: 45%);
+        }
+        .lighten-4 { 
+            background-color: color.scale($base-color, $lightness: 60%);
+        }
+    }
+}
+
+// Generate palettes for different themes
+@include generate-color-palette('red', $base-color-red);
+@include generate-color-palette('blue', $base-color-blue);
+@include generate-color-palette('green', $base-color-green);
+
+// Base styles
+body {
+    font-family: 'Segoe UI', sans-serif;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+
+// Main header 
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+    
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+    }
+    
+    .author {
+        font-size: 16px;
+        color: #7f8c8d;
+        margin: 0;
+        font-weight: 500;
+        font-style: italic;
+    }
+}
+
+// Container styles and dynamic text
+.container-1 {
+    margin: 0 auto;
+    width: 100%; 
+    
+    &::before {
+        content: '';
+        display: block;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    
+    &.theme-red::before {
+        content: 'Red Color Palette';
+    }
+    
+    &.theme-blue::before {
+        content: 'Blue Color Palette';
+    }
+    
+    &.theme-green::before {
+        content: 'Green Color Palette';
+    }
+}
+
