@@ -1,1 +1,6 @@
-.pdf
+*.pdf
+
+dist/
+.parcel-cache/
+
+node_modules/
