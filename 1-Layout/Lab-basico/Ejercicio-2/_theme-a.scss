@@ -1,0 +1,43 @@
+// Theme A 
+$primary-font-family: 'Roboto', sans-serif;
+$secondary-font-family: 'Arial', sans-serif;
+$base-bg-color: #dc3545;      
+$important-bg-color: #8b1a1a; 
+$warning-bg-color: #ffc0cb;   
+$warning-text-color: #333;     
+$border-radius-value: 4px;
+$shadow-value: 0 4px 8px rgba(0, 0, 0, 0.2); 
+
+.color-box {
+    border-radius: $border-radius-value;
+
+    &.base-color {
+        background-color: $base-bg-color;
+    }
+    &.important-color {
+        background-color: $important-bg-color;
+    }
+    &.warning-color {
+        background-color: $warning-bg-color;
+        .color-text {
+            color: $warning-text-color;
+            text-shadow: none; 
+        }
+    }
+}
+
+.typography-section {
+    .primary-font {
+        font-family: $primary-font-family;
+        font-weight: 500;
+    }
+    .secondary-font {
+        font-family: $secondary-font-family;
+        font-weight: 400;
+    }
+}
+
+.shadow-box {
+    border-radius: $border-radius-value;
+    box-shadow: $shadow-value;
+} 
