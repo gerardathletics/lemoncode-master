@@ -84,6 +84,23 @@ body {
         align-items: center;
         justify-content: center;
         position: relative;
+        border-radius: $border-radius-value;
+
+        &.base-color {
+            background-color: $base-bg-color;
+        }
+
+        &.important-color {
+            background-color: $important-bg-color;
+        }
+
+        &.warning-color {
+            background-color: $warning-bg-color;
+            .color-text {
+                color: $warning-text-color;
+                text-shadow: $warning-text-shadow;
+            }
+        }
         
         .color-text {
             color: white; 
@@ -100,6 +117,15 @@ body {
             margin-bottom: 8px;
             font-size: 16px;
         }
+
+        .primary-font {
+            font-family: $primary-font-family;
+            font-weight: $primary-font-weight;
+        }
+        .secondary-font {
+            font-family: $secondary-font-family;
+            font-weight: 400;
+        }
     }
     
     .shadow-box {
@@ -112,6 +138,8 @@ body {
         justify-content: center;
         font-size: 14px;
         color: #6c757d;
+        border-radius: $border-radius-value;
+        box-shadow: $shadow-value;
     }
 }
 

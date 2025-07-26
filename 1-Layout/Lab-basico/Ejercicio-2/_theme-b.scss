@@ -6,37 +6,6 @@ $important-bg-color: #002766;
 $warning-bg-color: #17a2b8;   
 $warning-text-color: white;    
 $border-radius-value: 12px;
-$shadow-value: 0 6px 12px rgba(0, 0, 0, 0.3); 
-
-.color-box {
-    border-radius: $border-radius-value;
-
-    &.base-color {
-        background-color: $base-bg-color;
-    }
-    &.important-color {
-        background-color: $important-bg-color;
-    }
-    &.warning-color {
-        background-color: $warning-bg-color;
-        .color-text {
-            color: $warning-text-color;
-        }
-    }
-}
-
-.typography-section {
-    .primary-font {
-        font-family: $primary-font-family;
-        font-weight: 600;
-    }
-    .secondary-font {
-        font-family: $secondary-font-family;
-        font-weight: 400;
-    }
-}
-
-.shadow-box {
-    border-radius: $border-radius-value;
-    box-shadow: $shadow-value;
-} 
+$shadow-value: 0 6px 12px rgba(0, 0, 0, 0.3);
+$primary-font-weight: 600;
+$warning-text-shadow: inherit; 
