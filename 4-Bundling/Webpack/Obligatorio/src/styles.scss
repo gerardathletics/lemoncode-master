@@ -1,0 +1,18 @@
+$texto-color: #C07F00;
+$fondo-color: #323330;
+
+body {
+  background-color: $fondo-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  margin: 0;
+
+  h1 {
+    color: $texto-color;
+    font-family: sans-serif;
+    font-size: 3rem;
+  }
+}
