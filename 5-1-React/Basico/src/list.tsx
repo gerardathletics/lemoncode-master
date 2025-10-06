@@ -35,6 +35,12 @@ export const ListPage: React.FC = () => {
             });
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     React.useEffect(() => {
         fetch(`https://api.github.com/orgs/${organization}/members`)
             .then((response) => response.json())
@@ -44,7 +50,7 @@ export const ListPage: React.FC = () => {
     return (
         <>
             <h2>Miembros de la organización en Github</h2>
-            <input type="text" value={organizationInput} onChange={(e) => setOrganizationInput(e.target.value)} placeholder="Organización" />
+            <input type="text" value={organizationInput} onChange={(e) => setOrganizationInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Organización" />
             <button onClick={handleSearch}>Buscar</button>
             {error && <div className="error-message">{error}</div>}
             <div className="list-user-list-container">
