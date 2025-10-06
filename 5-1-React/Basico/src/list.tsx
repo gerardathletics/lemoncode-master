@@ -9,13 +9,18 @@ interface MemberEntity {
 
 export const ListPage: React.FC = () => {
     const [members, setMembers] = React.useState<MemberEntity[]>([]);
-    const [organization, setOrganization] = React.useState('lemoncode');
+    const [organization, setOrganization] = React.useState(() => {
+        return sessionStorage.getItem('organization') || 'lemoncode';
+    });
+    const [organizationInput, setOrganizationInput] = React.useState(organization);
     const [error, setError] = React.useState<string | null>(null);
 
     const handleSearch = () => {
-        fetch(`https://api.github.com/orgs/${organization}/members`)
+        fetch(`https://api.github.com/orgs/${organizationInput}/members`)
             .then((response) => {
                 if (response.ok) {
+                    sessionStorage.setItem('organization', organizationInput);
+                    setOrganization(organizationInput);
                     return response.json();
                 }
                 throw new Error('No se ha encontrado la organización');
@@ -31,13 +36,15 @@ export const ListPage: React.FC = () => {
     };
 
     React.useEffect(() => {
-        handleSearch();
-    }, []);
+        fetch(`https://api.github.com/orgs/${organization}/members`)
+            .then((response) => response.json())
+            .then((json) => setMembers(json));
+    }, [organization]);
 
     return (
         <>
-            <h2>Miembros de la organización</h2>
-            <input type="text" value={organization} onChange={(e) => setOrganization(e.target.value)} placeholder="Organización" />
+            <h2>Miembros de la organización en Github</h2>
+            <input type="text" value={organizationInput} onChange={(e) => setOrganizationInput(e.target.value)} placeholder="Organización" />
             <button onClick={handleSearch}>Buscar</button>
             {error && <div className="error-message">{error}</div>}
             <div className="list-user-list-container">
