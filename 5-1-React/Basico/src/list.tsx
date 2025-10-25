@@ -90,6 +90,7 @@ export const ListPage: React.FC = () => {
                     <GitHubIcon fontSize="large" />
                     Miembros de la organización en Github
                 </Typography>
+                <Link to="/rickandmorty">Ir a Rick and Morty</Link>
             </Box>
 
             <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
