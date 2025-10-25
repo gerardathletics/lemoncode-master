@@ -1,22 +1,120 @@
+/* Paleta de colores */
+:root {
+    --primary-gold: #e2a16f;
+    --warm-cream: #fff0dd;
+    --light-gray: #d1d3d4;
+    --soft-blue: #86b0bd;
+    --text-dark: #2c3e50;
+    --text-light: #5a6c7d;
+}
+
+/* Estilos globales */
+body {
+    background-color: var(--warm-cream);
+    color: var(--text-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .list-user-list-container {
     display: grid;
     grid-template-columns: 80px 1fr 3fr;
     grid-template-rows: 20px;
     grid-auto-rows: 80px;
     grid-gap: 10px 5px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .list-header {
-    background-color: #2f4858;
+    background-color: var(--soft-blue);
     color: white;
     font-weight: bold;
+    border-radius: 4px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .list-user-list-container > img {
     width: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-gold);
 }
 
 .error-message {
-    color: red;
+    color: #e74c3c;
     font-weight: bold;
+    background-color: #fdf2f2;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 16px 0;
+}
+
+/* Estilos Material-UI */
+.MuiContainer-root {
+    background-color: var(--warm-cream);
+    min-height: 100vh;
+}
+
+.MuiPaper-root {
+    background-color: white !important;
+    border: 1px solid var(--light-gray) !important;
+}
+
+.MuiButton-contained {
+    background-color: var(--primary-gold) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    transition: all 0.3s ease !important;
+}
+
+.MuiButton-contained:hover {
+    background-color: #d4925a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(226, 161, 111, 0.3) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root {
+    border-radius: 8px !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: var(--primary-gold) !important;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--primary-gold) !important;
+    border-width: 2px !important;
+}
+
+.MuiTypography-h4 {
+    color: var(--text-dark) !important;
+    font-weight: 700 !important;
+}
+
+.MuiCard-root {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid var(--light-gray) !important;
+}
+
+.MuiListItem-root:hover {
+    background-color: var(--warm-cream) !important;
+    border-radius: 8px !important;
+}
+
+.MuiAvatar-root {
+    border: 2px solid var(--primary-gold) !important;
+}
+
+.MuiAlert-root {
+    border-radius: 8px !important;
+    border: 1px solid #f5c6cb !important;
 }
