@@ -50,10 +50,6 @@ export const RickAndMortyPage: React.FC = () => {
         fetchCharacters();
     }, [debouncedSearchTerm]);
 
-    if (loading) {
-        return <div>Cargando personajes...</div>;
-    }
-
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
             case 'alive':
