@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDebounce } from './hooks/useDebounce';
+import { Character, getCharacters } from './api/rickAndMortyApi';
 import {
     Container,
     TextField,
@@ -22,21 +23,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import InfoIcon from '@mui/icons-material/Info';
 import './rickAndMorty.css';
 
-interface Character {
-    id: number;
-    name: string;
-    image: string;
-    status: string;
-    species: string;
-    gender: string;
-    origin: {
-        name: string;
-    };
-    location: {
-        name: string;
-    };
-}
-
 export const RickAndMortyPage: React.FC = () => {
     const [characters, setCharacters] = useState<Character[]>([]);
     const [loading, setLoading] = useState(false);
@@ -51,18 +37,8 @@ export const RickAndMortyPage: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const url = debouncedSearchTerm
-                    ? `https://rickandmortyapi.com/api/character/?name=${encodeURIComponent(debouncedSearchTerm)}`
-                    : 'https://rickandmortyapi.com/api/character/';
-
-                const response = await fetch(url);
-
-                if (!response.ok) {
-                    throw new Error('No se encontraron personajes');
-                }
-
-                const data = await response.json();
-                setCharacters(data.results);
+                const characters = await getCharacters(debouncedSearchTerm || undefined);
+                setCharacters(characters);
             } catch (error) {
                 console.error('Error al cargar personajes:', error);
                 setError(error instanceof Error ? error.message : 'Error al cargar personajes');

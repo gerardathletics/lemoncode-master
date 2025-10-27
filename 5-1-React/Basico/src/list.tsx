@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { MemberEntity, getOrganizationMembers } from './api/githubApi';
 import {
     Container,
     TextField,
@@ -20,12 +21,6 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
-interface MemberEntity {
-    id: string;
-    login: string;
-    avatar_url: string;
-}
-
 export const ListPage: React.FC = () => {
     const [members, setMembers] = React.useState<MemberEntity[]>([]);
     const [organization, setOrganization] = React.useState(() => {
@@ -35,28 +30,20 @@ export const ListPage: React.FC = () => {
     const [error, setError] = React.useState<string | null>(null);
     const [loading, setLoading] = React.useState(false);
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         setLoading(true);
-        fetch(`https://api.github.com/orgs/${organizationInput}/members`)
-            .then((response) => {
-                if (response.ok) {
-                    sessionStorage.setItem('organization', organizationInput);
-                    setOrganization(organizationInput);
-                    return response.json();
-                }
-                throw new Error('No se ha encontrado la organización');
-            })
-            .then((json) => {
-                setMembers(json);
-                setError(null);
-            })
-            .catch((err) => {
-                setError(err.message);
-                setMembers([]);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        try {
+            const members = await getOrganizationMembers(organizationInput);
+            sessionStorage.setItem('organization', organizationInput);
+            setOrganization(organizationInput);
+            setMembers(members);
+            setError(null);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Error al buscar organización');
+            setMembers([]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -66,11 +53,18 @@ export const ListPage: React.FC = () => {
     };
 
     React.useEffect(() => {
-        setLoading(true);
-        fetch(`https://api.github.com/orgs/${organization}/members`)
-            .then((response) => response.json())
-            .then((json) => setMembers(json))
-            .finally(() => setLoading(false));
+        const loadMembers = async () => {
+            setLoading(true);
+            try {
+                const members = await getOrganizationMembers(organization);
+                setMembers(members);
+            } catch (err) {
+                console.error('Error al cargar miembros:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadMembers();
     }, [organization]);
 
     return (
