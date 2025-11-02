@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MemberEntity, getOrganizationMembers } from './api/githubApi';
+import { useOrganization } from './context/OrganizationContext';
 import {
     Container,
     TextField,
@@ -22,10 +23,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 export const ListPage: React.FC = () => {
+    const { organization, setOrganization } = useOrganization();
     const [members, setMembers] = React.useState<MemberEntity[]>([]);
-    const [organization, setOrganization] = React.useState(() => {
-        return sessionStorage.getItem('organization') || 'lemoncode';
-    });
     const [organizationInput, setOrganizationInput] = React.useState(organization);
     const [error, setError] = React.useState<string | null>(null);
     const [loading, setLoading] = React.useState(false);
@@ -34,7 +33,6 @@ export const ListPage: React.FC = () => {
         setLoading(true);
         try {
             const members = await getOrganizationMembers(organizationInput);
-            sessionStorage.setItem('organization', organizationInput);
             setOrganization(organizationInput);
             setMembers(members);
             setError(null);
