@@ -21,6 +21,16 @@ export const kittiesData: PictureInfo[] = [
         picUrl: 'https://cdn2.thecatapi.com/images/b11.jpg',
         title: 'Pantera',
     },
+    {
+        id: 'cat-5',
+        picUrl: 'https://cdn2.thecatapi.com/images/9j5.jpg',
+        title: 'Michi',
+    },
+    {
+        id: 'cat-6',
+        picUrl: 'https://cdn2.thecatapi.com/images/arr.jpg',
+        title: 'Luna',
+    },
 ];
 
 export const puppiesData: PictureInfo[] = [
@@ -31,17 +41,27 @@ export const puppiesData: PictureInfo[] = [
     },
     {
         id: 'dog-2',
-        picUrl: 'https://place.dog/301/301',
+        picUrl: 'https://place.dog/301/256',
         title: 'Rex',
     },
     {
         id: 'dog-3',
-        picUrl: 'https://place.dog/302/302',
+        picUrl: 'https://place.dog/302/102',
         title: 'Firulino',
     },
     {
         id: 'dog-4',
-        picUrl: 'https://place.dog/303/303',
+        picUrl: 'https://place.dog/303/505',
         title: 'Hachi',
+    },
+    {
+        id: 'dog-5',
+        picUrl: 'https://place.dog/304/304',
+        title: 'Max',
+    },
+    {
+        id: 'dog-6',
+        picUrl: 'https://place.dog/305/889',
+        title: 'Buddy',
     },
 ];

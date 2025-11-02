@@ -39,9 +39,15 @@ function PuppiesPage() {
 
     return (
         <div>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">🐶 Perritos</h2>
+            <div className="mb-8 pb-6 border-b-2 border-gradient-to-r from-secondary/20 via-primary/20 to-accent/20">
+                <h2 className="text-4xl font-extrabold bg-gradient-to-r from-secondary-dark via-secondary to-primary bg-clip-text text-transparent flex items-center gap-3">
+                    <span className="text-5xl">🐶</span>
+                    <span>Perritos</span>
+                </h2>
+                <p className="text-neutral-dark mt-2 ml-16">Descubre nuestra encantadora colección de perritos</p>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {pictures.map((picture) => (
                     <ImageCard key={picture.id} picture={picture} onCheckboxChange={handleCheckboxChange} />
                 ))}

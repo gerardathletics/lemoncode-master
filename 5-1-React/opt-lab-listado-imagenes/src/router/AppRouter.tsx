@@ -13,11 +13,11 @@ const router = createBrowserRouter([
                 element: <KittiesPage />,
             },
             {
-                path: 'kitties',
+                path: 'gatitos',
                 element: <KittiesPage />,
             },
             {
-                path: 'puppies',
+                path: 'perritos',
                 element: <PuppiesPage />,
             },
         ],
