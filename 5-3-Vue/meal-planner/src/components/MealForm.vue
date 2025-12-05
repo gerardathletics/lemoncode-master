@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { DAYS_OF_WEEK, type DayOfWeek } from '@/types'; 
 import { useMealsStore } from '@/stores/meals';
 import { useFavoritesStore } from '@/stores/favorites';
@@ -11,6 +11,34 @@ const favoritesStore = useFavoritesStore()
 const mealName = ref('')
 const selectedDay = ref<DayOfWeek | null>(null)
 const saveAsFavorite = ref(false)
+const showFavorites = ref(false)
+const showDays = ref(false)
+
+const sortedFavorites = computed(() => {
+  return [...favoritesStore.favorites].sort((a, b) => a.name.localeCompare(b.name))
+})
+
+function selectFavorite(name: string) {
+  mealName.value = name
+  showFavorites.value = false
+}
+
+function selectDay(day: DayOfWeek) {
+  selectedDay.value = day
+  showDays.value = false
+}
+
+function handleBlur() {
+  setTimeout(() => {
+    showFavorites.value = false
+  }, 200)
+}
+
+function handleDayBlur() {
+  setTimeout(() => {
+    showDays.value = false
+  }, 200)
+}
 
 
 function handleSubmit() {
@@ -36,7 +64,7 @@ function handleSubmit() {
 
     <div class="flex flex-col gap-4 sm:flex-row">
       <!-- Input del nombre -->
-      <div class="flex-1">
+      <div class="relative flex-1">
         <label for="meal-name" class="block mb-1 text-sm font-medium text-gray-600">
           Nombre del plato
         </label>
@@ -45,24 +73,61 @@ function handleSubmit() {
           v-model="mealName"
           type="text"
           placeholder="Ej: albóndigas"
+          autocomplete="off"
           class="px-4 py-2 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+          @focus="showFavorites = true"
+          @blur="handleBlur"
         />
+        
+        <!-- Dropdown para elegir favoritos -->
+        <ul
+          v-if="showFavorites && sortedFavorites.length > 0"
+          class="overflow-y-auto absolute z-10 mt-1 w-full max-h-60 bg-white rounded-xl border border-gray-100 shadow-xl"
+        >
+          <li
+            v-for="favorite in sortedFavorites"
+            :key="favorite.id"
+            @click="selectFavorite(favorite.name)"
+            class="flex items-center px-4 py-3 border-b border-gray-50 transition-colors cursor-pointer hover:bg-emerald-50 last:border-0"
+          >
+            <span class="mr-3 text-lg">⭐</span>
+            <span class="font-medium text-gray-700">{{ favorite.name }}</span>
+          </li>
+        </ul>
       </div>
 
       <!-- Select del día -->
-      <div class="sm:w-48">
+      <div class="relative sm:w-48">
         <label for="day-select" class="block mb-1 text-sm font-medium text-gray-600">
           Día
         </label>
-        <select
+        
+        <button
           id="day-select"
-          v-model="selectedDay"
-          class="px-4 py-2 w-full capitalize rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+          type="button"
+          class="flex justify-between items-center px-4 py-2 w-full text-left capitalize bg-white rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+          @click="showDays = !showDays"
+          @blur="handleDayBlur"
         >
-          <option v-for="day in DAYS_OF_WEEK" :key="day" :value="day">
+          <span :class="!selectedDay ? 'text-gray-400' : 'text-gray-700'">
+            {{ selectedDay ? selectedDay : 'Seleccionar...' }}
+          </span>
+          <span class="text-xs text-gray-500">▼</span>
+        </button>
+
+        <ul
+          v-if="showDays"
+          class="overflow-hidden absolute z-20 mt-1 w-full bg-white rounded-xl border border-gray-100 shadow-xl"
+        >
+          <li
+            v-for="day in DAYS_OF_WEEK"
+            :key="day"
+            @click="selectDay(day)"
+            class="px-4 py-2 text-gray-700 capitalize transition-colors cursor-pointer hover:bg-emerald-50"
+          >
             {{ day }}
-          </option>
-        </select>
+          </li>
+        </ul>
       </div>
 
       <div class="sm:self-end">
