@@ -2,21 +2,29 @@
 import { ref } from 'vue'
 import { DAYS_OF_WEEK, type DayOfWeek } from '@/types'; 
 import { useMealsStore } from '@/stores/meals';
+import { useFavoritesStore } from '@/stores/favorites';
 
 const mealsStore = useMealsStore()
+const favoritesStore = useFavoritesStore()
 
-// estado local
+// Estado local
 const mealName = ref('')
 const selectedDay = ref<DayOfWeek | null>(null)
+const saveAsFavorite = ref(false)
+
 
 function handleSubmit() {
-  // nada si el nombre esta vacio
+  // Nada si el nombre esta vacio
   if (!mealName.value.trim()) return
 
-  // store
+  // Store
   mealsStore.addMeal(mealName.value, selectedDay.value!)
 
-  // reset del nombre
+  if (saveAsFavorite.value) {
+    favoritesStore.addFavorite(mealName.value)
+  }
+
+  // Reset del nombre
   mealName.value = ''
 
 }
@@ -24,9 +32,7 @@ function handleSubmit() {
 
 <template>
   <form @submit.prevent="handleSubmit" class="p-6 bg-white rounded-xl shadow-md">
-    <h2 class="mb-4 text-lg font-semibold text-gray-700">
-      ➕ Añadir Plato
-    </h2>
+    <h2 class="mb-4 text-lg font-semibold text-gray-700">➕ Añadir Plato</h2>
 
     <div class="flex flex-col gap-4 sm:flex-row">
       <!-- Input del nombre -->
@@ -38,7 +44,7 @@ function handleSubmit() {
           id="meal-name"
           v-model="mealName"
           type="text"
-          placeholder="Ej: Albondigas"
+          placeholder="Ej: albóndigas"
           class="px-4 py-2 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
         />
       </div>
@@ -69,8 +75,16 @@ function handleSubmit() {
         </button>
       </div>
     </div>
+
+    <div class="mt-4">
+      <label class="flex gap-2 items-center cursor-pointer">
+        <input
+          v-model="saveAsFavorite"
+          type="checkbox"
+          class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500"
+        />
+        <span class="text-sm text-gray-600">Guardar como favorito</span>
+      </label>
+    </div>
   </form>
 </template>
-  
-
-  

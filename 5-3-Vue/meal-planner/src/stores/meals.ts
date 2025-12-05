@@ -17,7 +17,7 @@ const mealsByDay = computed(() => {
       domingo: []
     }
 
-    // anadimos las comidas a su dia
+    // Añadimos las comidas a su dia
     for (const meal of meals.value) {
       grouped[meal.day].push(meal)
     }

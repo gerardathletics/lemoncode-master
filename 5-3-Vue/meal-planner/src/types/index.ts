@@ -13,6 +13,11 @@ export type DayOfWeek =
   | 'sábado' 
   | 'domingo'
 
+export interface FavoriteMeal {
+  id: string
+  name: string
+}
+
 export const DAYS_OF_WEEK: DayOfWeek[] = [
   'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'
 ]
