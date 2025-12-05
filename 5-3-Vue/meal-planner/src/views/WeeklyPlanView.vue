@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MealForm from '@/components/MealForm.vue'
 import DayCard from '@/components/DayCard.vue'
-import { DAYS_OF_WEEK } from '@/types'
+import { DAYS_OF_WEEK } from '@/constants'
 </script>
 
 <template>

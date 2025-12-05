@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Meal, DayOfWeek } from '@/types'
+import type { Meal, DayOfWeek, MealCategory } from '@/types'
 
 export const useMealsStore = defineStore('meals', () => {
   const meals = ref<Meal[]>([])
 
   // Getter de comidas agrupadas por día
-const mealsByDay = computed(() => {
+  const mealsByDay = computed(() => {
     const grouped: Record<DayOfWeek, Meal[]> = {
       lunes: [],
       martes: [],
@@ -25,11 +25,12 @@ const mealsByDay = computed(() => {
     return grouped
   })
 
-  function addMeal(name: string, day: DayOfWeek) {
+  function addMeal(name: string, day: DayOfWeek, category: MealCategory) {
     const newMeal: Meal = {
       id: crypto.randomUUID(),
       name: name.trim(),
-      day
+      day,
+      category
     }
     meals.value.push(newMeal)
   }
