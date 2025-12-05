@@ -28,7 +28,7 @@ const displayDay = computed(() => {
     </div>
 
     <!-- Lista de platos -->
-    <div class="p-4 min-h-[100px]">
+    <div class="p-4 min-h-[300px]">
       <ul v-if="dayMeals.length > 0" class="space-y-2">
         <li
           v-for="meal in dayMeals"
