@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import type { House } from '../types/house'
 
@@ -33,29 +33,36 @@ function Home() {
         {houses.map((house) => (
           <li
             key={house.id}
-            className="overflow-hidden bg-white rounded-xl border border-gray-200 shadow-sm"
+            className="overflow-hidden bg-white rounded-xl border border-gray-200 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
-            <img
-              src={`http://localhost:3001${house.image}`}
-              alt={house.name}
-              className="object-cover w-full h-52"
-            />
+            <Link
+              to="/houses/$houseId"
+              params={{ houseId: house.id }}
+              className="block h-full"
+            >
+              <img
+                src={`http://localhost:3001${house.image}`}
+                alt={house.name}
+                className="object-cover w-full h-52"
+              />
 
-            <div className="p-5">
-              <h2 className="text-xl font-semibold">{house.name}</h2>
+              <div className="p-5">
+                <h2 className="text-xl font-semibold">{house.name}</h2>
 
-              <p className="mt-1 text-gray-600">
-                {house.city}, {house.country}
-              </p>
+                <p className="mt-1 text-gray-600">
+                  {house.city}, {house.country}
+                </p>
 
-              <p className="mt-4 text-sm text-gray-600">
-                {house.bedrooms} habitaciones · {house.bathrooms} baños
-              </p>
+                <p className="mt-4 text-sm text-gray-600">
+                  {house.bedrooms} habitaciones · {house.bathrooms} baños
+                </p>
 
-              <p className="mt-4 text-lg font-bold">
-                {house.price} € <span className="text-sm font-normal">/ noche</span>
-              </p>
-            </div>
+                <p className="mt-4 text-lg font-bold">
+                  {house.price} €{' '}
+                  <span className="text-sm font-normal">/ noche</span>
+                </p>
+              </div>
+            </Link>
           </li>
         ))}
       </ul>

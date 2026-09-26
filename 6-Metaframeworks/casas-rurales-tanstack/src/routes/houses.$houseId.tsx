@@ -3,7 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 import type { House } from '../types/house'
 
 const getHouse = createServerFn({ method: 'GET' })
-// comprobamos que solo contiene numeros
+  // comprobamos que solo contiene numeros el id
   .validator((houseId: string) => {
     if (!/^\d+$/.test(houseId)) {
       throw notFound()
@@ -12,9 +12,7 @@ const getHouse = createServerFn({ method: 'GET' })
     return houseId
   })
   .handler(async ({ data: houseId }): Promise<House> => {
-    const response = await fetch(
-      `http://localhost:3001/api/houses/${houseId}`,
-    )
+    const response = await fetch(`http://localhost:3001/api/houses/${houseId}`)
 
     if (!response.ok) {
       throw new Error('No se pudo cargar la casa')
@@ -71,8 +69,7 @@ function HouseDetail() {
       </dl>
 
       <p className="mt-6 text-2xl font-bold">
-        {house.price} €{' '}
-        <span className="text-base font-normal">por noche</span>
+        {house.price} € <span className="text-base font-normal">por noche</span>
       </p>
     </main>
   )
