@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import type { House } from '../types/house'
 
@@ -30,6 +30,7 @@ const getHouse = createServerFn({ method: 'GET' })
 export const Route = createFileRoute('/houses/$houseId')({
   loader: ({ params }) => getHouse({ data: params.houseId }),
   component: HouseDetail,
+  notFoundComponent: HouseNotFound,
 })
 
 function HouseDetail() {
@@ -37,6 +38,12 @@ function HouseDetail() {
 
   return (
     <main className="px-6 py-10 mx-auto max-w-4xl">
+      <Link
+        to="/"
+        className="inline-block mb-6 font-medium text-blue-700 hover:underline"
+      >
+        ← Volver al listado
+      </Link>
       <img
         src={`http://localhost:3001${house.image}`}
         alt={house.name}
@@ -71,6 +78,27 @@ function HouseDetail() {
       <p className="mt-6 text-2xl font-bold">
         {house.price} € <span className="text-base font-normal">por noche</span>
       </p>
+    </main>
+  )
+}
+
+function HouseNotFound() {
+  const { houseId } = Route.useParams()
+
+  return (
+    <main className="px-6 py-20 mx-auto max-w-4xl text-center">
+      <h1 className="text-4xl font-bold">Casa no encontrada</h1>
+
+      <p className="mt-4 text-gray-600">
+        No existe ninguna casa con el identificador {houseId}.
+      </p>
+
+      <Link
+        to="/"
+        className="inline-block mt-8 font-medium text-blue-700 hover:underline"
+      >
+        Volver al listado
+      </Link>
     </main>
   )
 }
