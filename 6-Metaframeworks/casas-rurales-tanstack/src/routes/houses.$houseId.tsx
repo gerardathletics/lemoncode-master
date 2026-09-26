@@ -29,6 +29,19 @@ const getHouse = createServerFn({ method: 'GET' })
 
 export const Route = createFileRoute('/houses/$houseId')({
   loader: ({ params }) => getHouse({ data: params.houseId }),
+  head: ({ loaderData }) => ({
+    meta: loaderData
+      ? [
+          {
+            title: `${loaderData.name} | Casas rurales`,
+          },
+          {
+            name: 'description',
+            content: loaderData.description,
+          },
+        ]
+      : [],
+  }),
   component: HouseDetail,
   notFoundComponent: HouseNotFound,
 })
