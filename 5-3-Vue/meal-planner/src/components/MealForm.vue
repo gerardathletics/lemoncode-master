@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { DAYS_OF_WEEK, MEAL_CATEGORIES, CATEGORY_LABELS } from '@/constants'
-import type { DayOfWeek, MealCategory } from '@/types' 
-import { useMealsStore } from '@/stores/meals';
-import { useFavoritesStore } from '@/stores/favorites';
+import { DAYS_OF_WEEK, MEAL_CATEGORIES } from '@/constants'
+import type { DayOfWeek, MealCategory } from '@/types'
+import { useMealsStore } from '@/stores/meals'
+import { useFavoritesStore } from '@/stores/favorites'
 
 const mealsStore = useMealsStore()
 const favoritesStore = useFavoritesStore()
 
 // Estado local
 const mealName = ref('')
-const selectedDay = ref<DayOfWeek | null>(null)
-const selectedCategory = ref<MealCategory | null>(null)
+const selectedDay = ref<DayOfWeek>('lunes')
+const selectedCategory = ref<MealCategory>('desayuno')
 const saveAsFavorite = ref(false)
 const showFavorites = ref(false)
-const showCategories = ref(false)
 const showDays = ref(false)
 
 const sortedFavorites = computed(() => {
@@ -31,17 +30,6 @@ function selectDay(day: DayOfWeek) {
   showDays.value = false
 }
 
-function selectCategory(category: MealCategory) {
-  selectedCategory.value = category
-  showCategories.value = false
-}
-
-function handleCategoryBlur() {
-  setTimeout(() => {
-    showCategories.value = false
-  }, 200)
-}
-
 function handleBlur() {
   setTimeout(() => {
     showFavorites.value = false
@@ -54,150 +42,142 @@ function handleDayBlur() {
   }, 200)
 }
 
-
 function handleSubmit() {
-  // Nada si el nombre esta vacio
   if (!mealName.value.trim()) return
 
-  // Store
-  mealsStore.addMeal(mealName.value, selectedDay.value!, selectedCategory.value!)
+  mealsStore.addMeal(mealName.value, selectedDay.value, selectedCategory.value)
 
   if (saveAsFavorite.value) {
     favoritesStore.addFavorite(mealName.value)
   }
 
-  // Reset del nombre
   mealName.value = ''
+}
 
+const categoryLabels: Record<MealCategory, string> = {
+  desayuno: 'Desayuno',
+  comida: 'Comida',
+  cena: 'Cena'
 }
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="p-6 bg-white rounded-xl shadow-md">
-    <h2 class="mb-4 text-lg font-semibold text-gray-700">➕ Añadir Plato</h2>
+  <div class="p-6 bg-white rounded-xl border shadow-sm border-slate-200">
+    <h2 class="mb-6 text-lg font-bold text-slate-800">Añadir Comida</h2>
 
-    <div class="flex flex-col gap-4 sm:flex-row">
+    <div class="flex flex-wrap gap-4 items-end">
       <!-- Input del nombre -->
-      <div class="relative flex-1">
-        <label for="meal-name" class="block mb-1 text-sm font-medium text-gray-600">
+      <div class="relative flex-1 min-w-[200px]">
+        <label for="meal-name" class="block mb-2 text-sm font-medium text-slate-600">
           Nombre del plato
         </label>
         <input
           id="meal-name"
           v-model="mealName"
           type="text"
-          placeholder="Ej: albóndigas"
+          placeholder="Ej: Tostada de aguacate"
           autocomplete="off"
-          class="px-4 py-2 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+          class="px-4 py-2.5 w-full text-sm rounded-lg border transition-colors border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
           @focus="showFavorites = true"
           @blur="handleBlur"
         />
         
-        <!-- Dropdown para elegir favoritos -->
+        <!-- Dropdown de favoritos -->
         <ul
           v-if="showFavorites && sortedFavorites.length > 0"
-          class="overflow-y-auto absolute z-10 mt-1 w-full max-h-60 bg-white rounded-xl border border-gray-100 shadow-xl"
+          class="overflow-y-auto absolute z-10 mt-1 w-full max-h-48 bg-white rounded-lg border shadow-lg border-slate-200"
         >
           <li
             v-for="favorite in sortedFavorites"
             :key="favorite.id"
             @click="selectFavorite(favorite.name)"
-            class="flex items-center px-4 py-3 border-b border-gray-50 transition-colors cursor-pointer hover:bg-emerald-50 last:border-0"
+            class="flex items-center px-4 py-2.5 text-sm transition-colors cursor-pointer hover:bg-slate-50"
           >
-            <span class="mr-3 text-lg">⭐</span>
-            <span class="font-medium text-gray-700">{{ favorite.name }}</span>
+            <span class="mr-2">⭐</span>
+            <span class="text-slate-700">{{ favorite.name }}</span>
           </li>
         </ul>
       </div>
 
       <!-- Select del día -->
-      <div class="relative sm:w-48">
-        <label for="day-select" class="block mb-1 text-sm font-medium text-gray-600">
+      <div class="relative w-40">
+        <label for="day-select" class="block mb-2 text-sm font-medium text-slate-600">
           Día
         </label>
         
         <button
           id="day-select"
           type="button"
-          class="flex justify-between items-center px-4 py-2 w-full text-left capitalize bg-white rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+          class="flex justify-between items-center px-4 py-2.5 w-full text-sm text-left capitalize bg-white rounded-lg border transition-colors border-slate-300 hover:border-slate-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
           @click="showDays = !showDays"
           @blur="handleDayBlur"
         >
-          <span :class="!selectedDay ? 'text-gray-400' : 'text-gray-700'">
-            {{ selectedDay ? selectedDay : 'Seleccionar...' }}
-          </span>
-          <span class="text-xs text-gray-500">▼</span>
+          <span class="text-slate-700">{{ selectedDay }}</span>
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
 
         <ul
           v-if="showDays"
-          class="overflow-hidden absolute z-20 mt-1 w-full bg-white rounded-xl border border-gray-100 shadow-xl"
+          class="overflow-hidden absolute z-20 mt-1 w-full bg-white rounded-lg border shadow-lg border-slate-200"
         >
           <li
             v-for="day in DAYS_OF_WEEK"
             :key="day"
             @click="selectDay(day)"
-            class="px-4 py-2 text-gray-700 capitalize transition-colors cursor-pointer hover:bg-emerald-50"
+            class="px-4 py-2 text-sm capitalize transition-colors cursor-pointer text-slate-700 hover:bg-slate-50"
+            :class="{ 'bg-emerald-50 text-emerald-700': day === selectedDay }"
           >
             {{ day }}
           </li>
         </ul>
       </div>
 
-      <!-- Categoría -->
-      <div class="relative sm:w-40">
-        <label for="category-select" class="block mb-1 text-sm font-medium text-gray-600">
+      <!-- Categoría con pill buttons -->
+      <div>
+        <label class="block mb-2 text-sm font-medium text-slate-600">
           Categoría
         </label>
-        
-        <button
-          id="category-select"
-          type="button"
-          class="flex justify-between items-center px-4 py-2 w-full text-left bg-white rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-          @click="showCategories = !showCategories"
-          @blur="handleCategoryBlur"
-        >
-          <span :class="!selectedCategory ? 'text-gray-400' : 'text-gray-700'">
-            {{ selectedCategory ? CATEGORY_LABELS[selectedCategory] : 'Seleccionar...' }}
-          </span>
-          <span class="text-xs text-gray-500">▼</span>
-        </button>
-
-        <ul
-          v-if="showCategories"
-          class="overflow-hidden absolute z-20 mt-1 w-full bg-white rounded-xl border border-gray-100 shadow-xl"
-        >
-          <li
+        <div class="flex gap-1">
+          <button
             v-for="category in MEAL_CATEGORIES"
             :key="category"
-            @click="selectCategory(category)"
-            class="px-4 py-2 text-gray-700 transition-colors cursor-pointer hover:bg-emerald-50"
+            type="button"
+            @click="selectedCategory = category"
+            class="px-4 py-2 text-sm font-medium rounded-full transition-all"
+            :class="[
+              selectedCategory === category
+                ? 'bg-emerald-500 text-white shadow-sm'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            ]"
           >
-            {{ CATEGORY_LABELS[category] }}
-          </li>
-        </ul>
+            {{ categoryLabels[category] }}
+          </button>
+        </div>
       </div>
 
-      <div class="sm:self-end">
-        <button
-          type="submit"
-          class="px-6 py-2 w-full font-medium text-white bg-emerald-500 rounded-lg transition-colors sm:w-auto hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed"
-          :disabled="!mealName.trim() || !selectedCategory"
-        >
-          Agregar
-        </button>
-      </div>
+      <!-- Botón submit -->
+      <button
+        type="button"
+        @click="handleSubmit"
+        class="px-6 py-2.5 text-sm font-medium text-white bg-emerald-500 rounded-full shadow-sm transition-all hover:bg-emerald-600 hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
+        :disabled="!mealName.trim()"
+      >
+        + Añadir
+      </button>
     </div>
 
+    <!-- Checkbox favoritos -->
     <div class="mt-4">
       <label class="flex gap-2 items-center cursor-pointer">
         <input
           v-model="saveAsFavorite"
           type="checkbox"
-          class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500"
+          class="w-4 h-4 text-emerald-500 rounded border-slate-300 focus:ring-emerald-500"
         />
-        <span class="text-sm text-gray-600">Guardar como favorito</span>
+        <span class="text-sm text-slate-600">Guardar como favorito</span>
       </label>
     </div>
-  </form>
+  </div>
 </template>

@@ -11,3 +11,9 @@ export const CATEGORY_LABELS: Record<MealCategory, string> = {
   comida: '☀️ Comida',
   cena: '🌙 Cena'
 }
+
+export const CATEGORY_COLORS: Record<MealCategory, string> = {
+  desayuno: 'text-emerald-600',
+  comida: 'text-blue-600',
+  cena: 'text-purple-600'
+}
