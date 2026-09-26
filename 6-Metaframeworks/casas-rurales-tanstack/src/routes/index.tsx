@@ -1,9 +1,19 @@
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import {
+  Link,
+  createFileRoute,
+  stripSearchParams,
+  useNavigate,
+} from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
+import { Image } from '@unpic/react'
 import type { House } from '../types/house'
 
 type HouseSearch = {
   search: string
+}
+
+const defaultSearch: HouseSearch = {
+  search: '',
 }
 
 function normalizeText(value: string) {
@@ -27,8 +37,12 @@ const getHouses = createServerFn({ method: 'GET' }).handler(
 
 export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>): HouseSearch => ({
-    search: typeof search.search === 'string' ? search.search : '',
+    search:
+      typeof search.search === 'string' ? search.search : defaultSearch.search,
   }),
+  search: {
+    middlewares: [stripSearchParams(defaultSearch)],
+  },
   loader: () => getHouses(),
   component: Home,
 })
@@ -40,11 +54,11 @@ function Home() {
 
   const normalizedSearch = normalizeText(search.trim())
 
-const filteredHouses = houses.filter((house) =>
-  normalizeText(
-    `${house.name} ${house.address} ${house.city} ${house.country}`,
-  ).includes(normalizedSearch),
-)
+  const filteredHouses = houses.filter((house) =>
+    normalizeText(
+      `${house.name} ${house.address} ${house.city} ${house.country}`,
+    ).includes(normalizedSearch),
+  )
 
   return (
     <main className="px-6 py-10 mx-auto max-w-6xl">
@@ -52,27 +66,27 @@ const filteredHouses = houses.filter((house) =>
       <p className="mt-2 text-gray-600">
         {filteredHouses.length} alojamientos disponibles
       </p>
-<div className="mt-6">
-  <label htmlFor="house-search" className="block font-medium">
-    Buscar por nombre o ubicación
-  </label>
+      <div className="mt-6">
+        <label htmlFor="house-search" className="block font-medium">
+          Buscar por nombre o ubicación
+        </label>
 
-  <input
-    id="house-search"
-    type="search"
-    value={search}
-    placeholder="Por ejemplo, Málaga"
-    className="px-4 py-3 mt-2 w-full rounded-lg border border-gray-300"
-    onChange={(event) => {
-      void navigate({
-        search: { search: event.target.value },
-        replace: true,
-      })
-    }}
-  />
-</div>
+        <input
+          id="house-search"
+          type="search"
+          value={search}
+          placeholder="Por ejemplo, Málaga"
+          className="px-4 py-3 mt-2 w-full rounded-lg border border-gray-300"
+          onChange={(event) => {
+            void navigate({
+              search: { search: event.target.value },
+              replace: true,
+            })
+          }}
+        />
+      </div>
       <ul className="grid gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredHouses.map((house) => (
+        {filteredHouses.map((house, index) => (
           <li
             key={house.id}
             className="overflow-hidden bg-white rounded-xl border border-gray-200 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
@@ -82,9 +96,12 @@ const filteredHouses = houses.filter((house) =>
               params={{ houseId: house.id }}
               className="block h-full"
             >
-              <img
+              <Image
                 src={`http://localhost:3001${house.image}`}
                 alt={house.name}
+                layout="fullWidth"
+                height={208}
+                priority={index === 0}
                 className="object-cover w-full h-52"
               />
 
@@ -108,10 +125,10 @@ const filteredHouses = houses.filter((house) =>
           </li>
         ))}
         {filteredHouses.length === 0 && (
-  <p className="p-6 mt-8 text-center text-gray-600 bg-gray-100 rounded-lg">
-    No se encontraron casas para “{search}”.
-  </p>
-)}
+          <p className="p-6 mt-8 text-center text-gray-600 bg-gray-100 rounded-lg">
+            No se encontraron casas para “{search}”.
+          </p>
+        )}
       </ul>
     </main>
   )

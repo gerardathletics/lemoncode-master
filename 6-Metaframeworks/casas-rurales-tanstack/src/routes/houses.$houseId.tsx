@@ -1,5 +1,6 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
+import { Image } from '@unpic/react'
 import type { House } from '../types/house'
 
 const getHouse = createServerFn({ method: 'GET' })
@@ -53,13 +54,17 @@ function HouseDetail() {
     <main className="px-6 py-10 mx-auto max-w-4xl">
       <Link
         to="/"
+        search={{ search: '' }}
         className="inline-block mb-6 font-medium text-blue-700 hover:underline"
       >
         ← Volver al listado
       </Link>
-      <img
+      <Image
         src={`http://localhost:3001${house.image}`}
         alt={house.name}
+        layout="fullWidth"
+        height={384}
+        priority
         className="object-cover w-full h-96 rounded-xl"
       />
 
@@ -108,6 +113,7 @@ function HouseNotFound() {
 
       <Link
         to="/"
+        search={{ search: '' }}
         className="inline-block mt-8 font-medium text-blue-700 hover:underline"
       >
         Volver al listado
