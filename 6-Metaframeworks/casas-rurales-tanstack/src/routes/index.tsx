@@ -1,6 +1,17 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import type { House } from '../types/house'
+
+type HouseSearch = {
+  search: string
+}
+
+function normalizeText(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLocaleLowerCase('es')
+}
 
 const getHouses = createServerFn({ method: 'GET' }).handler(
   async (): Promise<House[]> => {
@@ -15,22 +26,53 @@ const getHouses = createServerFn({ method: 'GET' }).handler(
 )
 
 export const Route = createFileRoute('/')({
+  validateSearch: (search: Record<string, unknown>): HouseSearch => ({
+    search: typeof search.search === 'string' ? search.search : '',
+  }),
   loader: () => getHouses(),
   component: Home,
 })
 
 function Home() {
   const houses = Route.useLoaderData()
+  const { search } = Route.useSearch()
+  const navigate = useNavigate({ from: Route.fullPath })
+
+  const normalizedSearch = normalizeText(search.trim())
+
+const filteredHouses = houses.filter((house) =>
+  normalizeText(
+    `${house.name} ${house.address} ${house.city} ${house.country}`,
+  ).includes(normalizedSearch),
+)
 
   return (
     <main className="px-6 py-10 mx-auto max-w-6xl">
       <h1 className="text-4xl font-bold">Casas rurales</h1>
       <p className="mt-2 text-gray-600">
-        {houses.length} alojamientos disponibles
+        {filteredHouses.length} alojamientos disponibles
       </p>
+<div className="mt-6">
+  <label htmlFor="house-search" className="block font-medium">
+    Buscar por nombre o ubicación
+  </label>
 
+  <input
+    id="house-search"
+    type="search"
+    value={search}
+    placeholder="Por ejemplo, Málaga"
+    className="px-4 py-3 mt-2 w-full rounded-lg border border-gray-300"
+    onChange={(event) => {
+      void navigate({
+        search: { search: event.target.value },
+        replace: true,
+      })
+    }}
+  />
+</div>
       <ul className="grid gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-3">
-        {houses.map((house) => (
+        {filteredHouses.map((house) => (
           <li
             key={house.id}
             className="overflow-hidden bg-white rounded-xl border border-gray-200 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
@@ -65,6 +107,11 @@ function Home() {
             </Link>
           </li>
         ))}
+        {filteredHouses.length === 0 && (
+  <p className="p-6 mt-8 text-center text-gray-600 bg-gray-100 rounded-lg">
+    No se encontraron casas para “{search}”.
+  </p>
+)}
       </ul>
     </main>
   )
