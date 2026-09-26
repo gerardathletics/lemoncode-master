@@ -37,10 +37,31 @@ Endpoints disponibles:
 - Subir el código a un repositorio público de GitHub por cada metaframework utilizado.
 - Incluir un `README.md` en cada repositorio con los desafíos implementados.
 - Compartir los enlaces de los repositorios en el campus para su revisión.
+---
 
 ## Desarrollo local
+
+La aplicación necesita el mock API de Lemoncode ejecutándose en el puerto `3001`.
+
+```bash
+git clone https://github.com/Lemoncode/master-frontend-metaframeworks-lab.git
+cd master-frontend-metaframeworks-lab/api-server
+npm install
+npm start
+```
+
+En otra terminal, arranca la aplicación:
 
 ```bash
 npm install
 npm run dev
+```
+
+La aplicación estará disponible en `http://localhost:3000`.
+
+## Comprobaciones
+
+```bash
+npm run lint
+npm run build
 ```
