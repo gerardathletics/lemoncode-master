@@ -15,7 +15,11 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Casas rurales',
+      },
+      {
+        name: 'description',
+        content: 'Portal de alquiler vacacional de casas rurales',
       },
     ],
     links: [
@@ -30,7 +34,7 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <HeadContent />
       </head>
