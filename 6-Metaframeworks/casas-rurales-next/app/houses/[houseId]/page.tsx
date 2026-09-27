@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { House } from '@/types/house'
+import { ReserveButton } from './reserve-button'
 
 type HouseDetailPageProps = {
   params: Promise<{
@@ -100,6 +101,9 @@ export default async function HouseDetailPage({
                 ))}
               </ul>
             </section>
+            <div className="mt-8">
+              <ReserveButton />
+            </div>
           </div>
         </article>
       </div>
